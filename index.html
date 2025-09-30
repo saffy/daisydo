@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DaisyDo - Tailwind Theme Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .slider-track {
+            position: relative;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .slider-thumb {
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .hue-gradient {
+            background: linear-gradient(to right, 
+                #ff0000 0%, #ffff00 16.66%, #00ff00 33.33%, 
+                #00ffff 50%, #0000ff 66.66%, #ff00ff 83.33%, #ff0000 100%);
+        }
+        
+        .saturation-gradient {
+            background: linear-gradient(to right, #fff 0%, #ff0000 100%);
+        }
+        
+        .brightness-gradient {
+            background: linear-gradient(to right, #000 0%, #fff 100%);
+        }
+        
+        .temperature-gradient {
+            background: linear-gradient(to right, #0066ff 0%, #fff 50%, #ff6600 100%);
+        }
+        
+        .color-swatch {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .color-swatch:hover {
+            transform: scale(1.05);
+        }
+        
+        .popup-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">DaisyDo</h1>
+            <p class="text-lg text-gray-600">Tailwind Theme Generator</p>
+        </header>
+        
+        <div class="max-w-4xl mx-auto">
+            <!-- Current Palette Display -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold text-gray-800">Current Palette</h2>
+                    <button id="adjustPaletteBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        Adjust Palette
+                    </button>
+                </div>
+                
+                <div id="paletteContainer" class="grid grid-cols-5 gap-4">
+                    <!-- Color swatches will be generated here -->
+                </div>
+            </div>
+            
+            <!-- Generated Tailwind Config -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Tailwind Config</h2>
+                <pre id="tailwindConfig" class="bg-gray-50 p-4 rounded-lg text-sm overflow-x-auto">
+                    <!-- Generated config will appear here -->
+                </pre>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Palette Adjustment Popup -->
+    <div id="adjustmentPopup" class="fixed inset-0 popup-overlay z-50 flex items-center justify-center" style="display: none;">
+        <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Adjust Palette</h3>
+                <button id="closePopupBtn" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Hue Adjustment -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Hue</label>
+                    <div class="slider-track hue-gradient">
+                        <div id="hueThumb" class="slider-thumb" style="left: 50%"></div>
+                    </div>
+                    <input type="number" id="hueInput" class="mt-2 w-full px-3 py-1 border border-gray-300 rounded text-sm" min="0" max="360" value="0">
+                </div>
+                
+                <!-- Saturation Adjustment -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Saturation</label>
+                    <div class="slider-track saturation-gradient">
+                        <div id="saturationThumb" class="slider-thumb" style="left: 50%"></div>
+                    </div>
+                    <input type="number" id="saturationInput" class="mt-2 w-full px-3 py-1 border border-gray-300 rounded text-sm" min="-100" max="100" value="0">
+                </div>
+                
+                <!-- Brightness Adjustment -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Brightness</label>
+                    <div class="slider-track brightness-gradient">
+                        <div id="brightnessThumb" class="slider-thumb" style="left: 50%"></div>
+                    </div>
+                    <input type="number" id="brightnessInput" class="mt-2 w-full px-3 py-1 border border-gray-300 rounded text-sm" min="-100" max="100" value="0">
+                </div>
+                
+                <!-- Temperature Adjustment -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Temperature</label>
+                    <div class="slider-track temperature-gradient">
+                        <div id="temperatureThumb" class="slider-thumb" style="left: 50%"></div>
+                    </div>
+                    <input type="number" id="temperatureInput" class="mt-2 w-full px-3 py-1 border border-gray-300 rounded text-sm" min="-100" max="100" value="0">
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-3 mt-6">
+                <button id="resetBtn" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Reset</button>
+                <button id="applyBtn" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Apply</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
