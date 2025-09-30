@@ -1,0 +1,17 @@
+{
+  "name": "daisydo",
+  "version": "1.0.0",
+  "description": "Tailwind Theme Generator a.k.a Daisy Daisy Give Me Your Answer Do",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx live-server --port=3000",
+    "build": "echo 'No build step required for this static project'",
+    "test": "echo 'No tests configured yet'"
+  },
+  "keywords": ["tailwind", "theme", "generator", "colors", "ui"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

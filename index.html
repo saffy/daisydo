@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DaisyDo - Tailwind Theme Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.125rem;
+            color: #64748b;
+        }
+        
+        .color-input-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .color-input-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #0f172a;
+        }
+        
+        .color-inputs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        
+        .color-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .color-input-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .color-input {
+            width: 80px;
+            height: 40px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .color-input:hover {
+            border-color: #3b82f6;
+        }
+        
+        .generate-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .generate-btn:hover {
+            background: #2563eb;
+        }
+        
+        .visualizer-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .visualizer-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+        }
+        
+        .visualizer-design {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .ui-preview {
+            display: none;
+        }
+        
+        .ui-preview.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>DaisyDo</h1>
+            <p>Tailwind Theme Generator - Visualize Your Color Schemes</p>
+        </header>
+        
+        <section class="color-input-section">
+            <h2>Color Scheme</h2>
+            <div class="color-inputs">
+                <div class="color-input-group">
+                    <label for="primary">Primary</label>
+                    <input type="color" id="primary" class="color-input" value="#3b82f6">
+                </div>
+                <div class="color-input-group">
+                    <label for="secondary">Secondary</label>
+                    <input type="color" id="secondary" class="color-input" value="#10b981">
+                </div>
+                <div class="color-input-group">
+                    <label for="accent">Accent</label>
+                    <input type="color" id="accent" class="color-input" value="#8b5cf6">
+                </div>
+                <div class="color-input-group">
+                    <label for="neutral">Neutral</label>
+                    <input type="color" id="neutral" class="color-input" value="#374151">
+                </div>
+                <div class="color-input-group">
+                    <label for="background">Background</label>
+                    <input type="color" id="background" class="color-input" value="#f8fafc">
+                </div>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <button class="generate-btn" onclick="generateVisualization()">Generate Visualization</button>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button onclick="loadExampleScheme('dark')" style="background: #111827; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.875rem; cursor: pointer;">Dark Theme</button>
+                <button onclick="loadExampleScheme('warm')" style="background: #f59e0b; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.875rem; cursor: pointer;">Warm Theme</button>
+                <button onclick="loadExampleScheme('cool')" style="background: #0ea5e9; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.875rem; cursor: pointer;">Cool Theme</button>
+                <button onclick="loadExampleScheme('monochrome')" style="background: #374151; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.875rem; cursor: pointer;">Monochrome</button>
+            </div>
+        </section>
+        
+        <section class="visualizer-section">
+            <h2>UI Preview</h2>
+            <div class="visualizer-design" data-cat="ui">
+                <div id="ui-preview" class="ui-preview">
+                    <!-- SVG UI mockup will be generated here -->
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script src="visualizer.js"></script>
+</body>
+</html>
