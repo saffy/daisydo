@@ -1,0 +1,102 @@
+/* Custom styles for DaisyDo Theme Generator */
+
+/* Preview styles - dynamically updated by JavaScript */
+#preview {
+    transition: all 0.3s ease;
+}
+
+.preview-title {
+    color: var(--primary-color, #3b82f6);
+}
+
+.preview-text {
+    font-family: var(--font-family, 'Inter', sans-serif);
+    font-size: var(--font-size, 1rem);
+}
+
+.preview-btn-primary {
+    background-color: var(--primary-color, #3b82f6);
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+.preview-btn-primary:hover {
+    filter: brightness(0.9);
+}
+
+.preview-btn-secondary {
+    background-color: var(--secondary-color, #10b981);
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+.preview-btn-secondary:hover {
+    filter: brightness(0.9);
+}
+
+.preview-btn-accent {
+    background-color: var(--accent-color, #f59e0b);
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+.preview-btn-accent:hover {
+    filter: brightness(0.9);
+}
+
+.preview-card {
+    background-color: var(--background-color, #f9fafb);
+    border: 1px solid var(--secondary-color, #10b981);
+}
+
+/* Undo/Redo button animations */
+button:disabled {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+button:not(:disabled):hover {
+    transform: scale(1.05);
+    transition: transform 0.1s ease;
+}
+
+/* History counter styling */
+#historyCounter {
+    font-family: monospace;
+    user-select: none;
+}
+
+/* Code block styling */
+#generatedConfig {
+    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* Color input styling */
+input[type="color"] {
+    cursor: pointer;
+    border: 2px solid #e5e7eb;
+    transition: border-color 0.2s ease;
+}
+
+input[type="color"]:hover {
+    border-color: #3b82f6;
+}
+
+/* Select styling */
+select {
+    cursor: pointer;
+    background-color: white;
+    transition: border-color 0.2s ease;
+}
+
+select:hover {
+    border-color: #3b82f6;
+}
+
+select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}

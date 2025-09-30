@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DaisyDo - Tailwind Theme Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">DaisyDo</h1>
+            <p class="text-gray-600">Tailwind Theme Generator - Daisy Daisy Give Me Your Answer Do</p>
+        </header>
+
+        <!-- Undo/Redo Controls -->
+        <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-800">Actions</h2>
+                <div class="flex gap-2">
+                    <button id="undoBtn" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+                        ↶ Undo
+                    </button>
+                    <button id="redoBtn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+                        ↷ Redo
+                    </button>
+                    <span id="historyCounter" class="px-3 py-2 bg-gray-100 rounded text-sm text-gray-600">
+                        0/50 states
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme Configuration Panel -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Color Configuration -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Theme Colors</h2>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <label for="primaryColor" class="text-sm font-medium text-gray-700">Primary Color:</label>
+                        <input type="color" id="primaryColor" value="#3b82f6" class="w-12 h-8 rounded border">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <label for="secondaryColor" class="text-sm font-medium text-gray-700">Secondary Color:</label>
+                        <input type="color" id="secondaryColor" value="#10b981" class="w-12 h-8 rounded border">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <label for="accentColor" class="text-sm font-medium text-gray-700">Accent Color:</label>
+                        <input type="color" id="accentColor" value="#f59e0b" class="w-12 h-8 rounded border">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <label for="backgroundColor" class="text-sm font-medium text-gray-700">Background:</label>
+                        <input type="color" id="backgroundColor" value="#f9fafb" class="w-12 h-8 rounded border">
+                    </div>
+                </div>
+
+                <!-- Font Settings -->
+                <h3 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Typography</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <label for="fontFamily" class="text-sm font-medium text-gray-700">Font Family:</label>
+                        <select id="fontFamily" class="border rounded px-2 py-1">
+                            <option value="sans">Sans-serif</option>
+                            <option value="serif">Serif</option>
+                            <option value="mono">Monospace</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <label for="fontSize" class="text-sm font-medium text-gray-700">Base Font Size:</label>
+                        <select id="fontSize" class="border rounded px-2 py-1">
+                            <option value="text-sm">Small</option>
+                            <option value="text-base" selected>Base</option>
+                            <option value="text-lg">Large</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Preview -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Live Preview</h2>
+                
+                <div id="preview" class="border rounded-lg p-4 min-h-64">
+                    <div class="mb-4">
+                        <h3 class="preview-title text-xl font-bold mb-2">Sample Content</h3>
+                        <p class="preview-text text-gray-600 mb-4">This is how your theme will look in practice. The colors and typography will update as you modify the settings.</p>
+                        
+                        <div class="flex gap-2 mb-4">
+                            <button class="preview-btn-primary px-4 py-2 rounded font-medium">Primary Button</button>
+                            <button class="preview-btn-secondary px-4 py-2 rounded font-medium">Secondary Button</button>
+                            <button class="preview-btn-accent px-4 py-2 rounded font-medium">Accent Button</button>
+                        </div>
+                        
+                        <div class="preview-card rounded p-3 mb-3">
+                            <h4 class="font-semibold mb-1">Card Component</h4>
+                            <p class="text-sm">This is a sample card with your theme colors applied.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generated CSS Output -->
+        <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Generated Tailwind Config</h2>
+            <pre id="generatedConfig" class="bg-gray-900 text-green-400 p-4 rounded text-sm overflow-x-auto"></pre>
+            <button id="copyBtn" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                📋 Copy to Clipboard
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
