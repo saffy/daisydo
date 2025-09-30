@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Tailwind Theme Generator - Create responsive themes with ease">
+    <title>DaisyDo - Tailwind Theme Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: {
+                        'xs': '475px',
+                    },
+                    spacing: {
+                        'safe-top': 'env(safe-area-inset-top)',
+                        'safe-bottom': 'env(safe-area-inset-bottom)',
+                        'safe-left': 'env(safe-area-inset-left)',
+                        'safe-right': 'env(safe-area-inset-right)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom responsive styles */
+        .btn-touch {
+            min-height: 44px;
+            min-width: 44px;
+            touch-action: manipulation;
+        }
+        
+        .input-responsive {
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+        
+        .drag-handle {
+            touch-action: pan-y;
+        }
+        
+        /* Smooth scrolling for better mobile experience */
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Custom scrollbar for better mobile experience */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        
+        /* Responsive typography */
+        body {
+            font-size: clamp(14px, 2.5vw, 16px);
+        }
+        
+        .theme-preview {
+            transition: all 0.3s ease;
+        }
+        
+        @media (hover: hover) {
+            .theme-preview:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            }
+        }
+        
+        /* Touch-friendly focus styles */
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible,
+        select:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Mobile-first responsive header -->
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20">
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm sm:text-lg">D</span>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">DaisyDo</h1>
+                        <p class="text-xs sm:text-sm text-gray-600 hidden sm:block">Tailwind Theme Generator</p>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" class="btn-touch md:hidden bg-gray-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                
+                <!-- Desktop navigation -->
+                <nav class="hidden md:flex space-x-4 lg:space-x-8">
+                    <a href="#generator" class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium transition-colors">Generator</a>
+                    <a href="#preview" class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium transition-colors">Preview</a>
+                    <a href="#export" class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium transition-colors">Export</a>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Mobile navigation menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#generator" class="text-gray-700 hover:text-purple-600 block px-3 py-2 text-sm font-medium">Generator</a>
+                <a href="#preview" class="text-gray-700 hover:text-purple-600 block px-3 py-2 text-sm font-medium">Preview</a>
+                <a href="#export" class="text-gray-700 hover:text-purple-600 block px-3 py-2 text-sm font-medium">Export</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content with responsive layout -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+        <!-- Hero section with responsive text -->
+        <section class="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+                Create Beautiful 
+                <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    Tailwind Themes
+                </span>
+            </h2>
+            <p class="text-base sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed px-4 sm:px-0">
+                Design responsive, accessible themes for your Tailwind CSS projects with our intuitive generator.
+            </p>
+        </section>
+
+        <!-- Theme generator with responsive grid -->
+        <section id="generator" class="mb-8 sm:mb-12 lg:mb-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
+                <!-- Color palette generator -->
+                <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">Color Palette</h3>
+                    
+                    <!-- Responsive color input grid -->
+                    <div class="grid grid-cols-1 xs:grid-cols-2 gap-4 sm:gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="primary-color" 
+                                       class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer" 
+                                       value="#8b5cf6">
+                                <input type="text" id="primary-hex" 
+                                       class="input-responsive flex-1 border-gray-300 rounded-lg text-sm" 
+                                       value="#8b5cf6" placeholder="#8b5cf6">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="secondary-color" 
+                                       class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer" 
+                                       value="#ec4899">
+                                <input type="text" id="secondary-hex" 
+                                       class="input-responsive flex-1 border-gray-300 rounded-lg text-sm" 
+                                       value="#ec4899" placeholder="#ec4899">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Accent Color</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="accent-color" 
+                                       class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer" 
+                                       value="#06b6d4">
+                                <input type="text" id="accent-hex" 
+                                       class="input-responsive flex-1 border-gray-300 rounded-lg text-sm" 
+                                       value="#06b6d4" placeholder="#06b6d4">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Neutral Color</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="neutral-color" 
+                                       class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer" 
+                                       value="#64748b">
+                                <input type="text" id="neutral-hex" 
+                                       class="input-responsive flex-1 border-gray-300 rounded-lg text-sm" 
+                                       value="#64748b" placeholder="#64748b">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Responsive button group -->
+                    <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                        <button id="generate-palette" 
+                                class="btn-touch bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors flex-1 sm:flex-none">
+                            Generate Random
+                        </button>
+                        <button id="reset-palette" 
+                                class="btn-touch bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors flex-1 sm:flex-none">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Typography settings -->
+                <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">Typography</h3>
+                    
+                    <div class="space-y-4 sm:space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Font Family</label>
+                            <select id="font-family" class="input-responsive w-full border-gray-300 rounded-lg">
+                                <option value="Inter">Inter</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="Open Sans">Open Sans</option>
+                                <option value="Poppins">Poppins</option>
+                                <option value="Montserrat">Montserrat</option>
+                            </select>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 xs:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Base Size (px)</label>
+                                <input type="range" id="base-size" min="12" max="20" value="16" 
+                                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>12px</span>
+                                    <span id="base-size-value">16px</span>
+                                    <span>20px</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Line Height</label>
+                                <input type="range" id="line-height" min="1.2" max="2.0" step="0.1" value="1.6" 
+                                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>1.2</span>
+                                    <span id="line-height-value">1.6</span>
+                                    <span>2.0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live preview section with responsive layout -->
+        <section id="preview" class="mb-8 sm:mb-12 lg:mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900">Live Preview</h3>
+                    
+                    <!-- Responsive device toggle -->
+                    <div class="flex bg-gray-100 rounded-lg p-1 gap-1">
+                        <button class="device-btn btn-touch px-3 py-1 rounded text-sm font-medium bg-white shadow-sm" data-device="mobile">
+                            📱 Mobile
+                        </button>
+                        <button class="device-btn btn-touch px-3 py-1 rounded text-sm font-medium text-gray-600" data-device="tablet">
+                            📱 Tablet
+                        </button>
+                        <button class="device-btn btn-touch px-3 py-1 rounded text-sm font-medium text-gray-600" data-device="desktop">
+                            💻 Desktop
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Preview container with device simulation -->
+                <div id="preview-container" class="border-2 border-gray-200 rounded-lg overflow-hidden theme-preview">
+                    <div id="preview-content" class="preview-mobile bg-gray-50 p-4 sm:p-6 min-h-[400px] transition-all duration-300">
+                        <!-- Sample components using the generated theme -->
+                        <div class="space-y-4 sm:space-y-6">
+                            <!-- Header preview -->
+                            <div class="bg-white rounded-lg p-4 shadow-sm">
+                                <h4 class="text-lg sm:text-xl font-semibold mb-2" style="color: var(--primary-color, #8b5cf6)">
+                                    Sample Header
+                                </h4>
+                                <p class="text-gray-600 text-sm sm:text-base">This is how your theme will look with different components.</p>
+                            </div>
+                            
+                            <!-- Button previews -->
+                            <div class="flex flex-wrap gap-3">
+                                <button class="btn-touch px-4 py-2 rounded-lg text-white font-medium" 
+                                        style="background-color: var(--primary-color, #8b5cf6)">
+                                    Primary Button
+                                </button>
+                                <button class="btn-touch px-4 py-2 rounded-lg text-white font-medium" 
+                                        style="background-color: var(--secondary-color, #ec4899)">
+                                    Secondary Button
+                                </button>
+                                <button class="btn-touch px-4 py-2 rounded-lg border-2 font-medium" 
+                                        style="border-color: var(--accent-color, #06b6d4); color: var(--accent-color, #06b6d4)">
+                                    Accent Button
+                                </button>
+                            </div>
+                            
+                            <!-- Card preview -->
+                            <div class="bg-white rounded-lg p-4 sm:p-6 shadow-sm">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full mr-3" 
+                                         style="background-color: var(--accent-color, #06b6d4)"></div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-900 text-sm sm:text-base">Sample Card</h5>
+                                        <p class="text-xs sm:text-sm" style="color: var(--neutral-color, #64748b)">
+                                            Card subtitle
+                                        </p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 text-sm sm:text-base mb-4">
+                                    This card demonstrates how your color palette works together in a real component.
+                                </p>
+                                <div class="flex justify-end">
+                                    <button class="btn-touch text-sm font-medium px-3 py-2 rounded" 
+                                            style="color: var(--primary-color, #8b5cf6)">
+                                        Learn More
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Export section with responsive layout -->
+        <section id="export" class="mb-8 sm:mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">Export Your Theme</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+                    <!-- Code output -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tailwind Config</label>
+                        <textarea id="config-output" readonly 
+                                  class="input-responsive w-full h-48 sm:h-64 font-mono text-xs sm:text-sm bg-gray-50 border-gray-300 rounded-lg"
+                                  placeholder="Your generated Tailwind config will appear here..."></textarea>
+                    </div>
+                    
+                    <!-- Export options -->
+                    <div class="space-y-4 sm:space-y-6">
+                        <div>
+                            <h4 class="text-lg font-medium text-gray-900 mb-3">Export Options</h4>
+                            <div class="space-y-3">
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="include-responsive" checked 
+                                           class="rounded border-gray-300 text-purple-600 mr-3">
+                                    <span class="text-sm sm:text-base">Include responsive breakpoints</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="include-typography" checked 
+                                           class="rounded border-gray-300 text-purple-600 mr-3">
+                                    <span class="text-sm sm:text-base">Include typography settings</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="include-components" 
+                                           class="rounded border-gray-300 text-purple-600 mr-3">
+                                    <span class="text-sm sm:text-base">Include component examples</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Export buttons -->
+                        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                            <button id="copy-config" 
+                                    class="btn-touch bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors flex-1">
+                                📋 Copy Config
+                            </button>
+                            <button id="download-config" 
+                                    class="btn-touch bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors flex-1">
+                                💾 Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Responsive footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12 sm:mt-16 lg:mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="text-center sm:text-left">
+                    <p class="text-sm text-gray-600">
+                        Made with ❤️ for the Tailwind community
+                    </p>
+                </div>
+                <div class="flex space-x-4 sm:space-x-6">
+                    <a href="#" class="text-sm text-gray-600 hover:text-purple-600 transition-colors">GitHub</a>
+                    <a href="#" class="text-sm text-gray-600 hover:text-purple-600 transition-colors">Docs</a>
+                    <a href="#" class="text-sm text-gray-600 hover:text-purple-600 transition-colors">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for interactivity -->
+    <script>
+        // Theme generator functionality
+        class ThemeGenerator {
+            constructor() {
+                this.currentTheme = {
+                    primary: '#8b5cf6',
+                    secondary: '#ec4899',
+                    accent: '#06b6d4',
+                    neutral: '#64748b',
+                    fontFamily: 'Inter',
+                    fontSize: 16,
+                    lineHeight: 1.6
+                };
+                
+                this.initializeEventListeners();
+                this.updatePreview();
+                this.generateConfig();
+            }
+            
+            initializeEventListeners() {
+                // Mobile menu toggle
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                const mobileMenu = document.getElementById('mobile-menu');
+                
+                mobileMenuBtn?.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+                
+                // Color inputs
+                ['primary', 'secondary', 'accent', 'neutral'].forEach(color => {
+                    const colorInput = document.getElementById(`${color}-color`);
+                    const hexInput = document.getElementById(`${color}-hex`);
+                    
+                    colorInput?.addEventListener('input', (e) => {
+                        this.currentTheme[color] = e.target.value;
+                        hexInput.value = e.target.value;
+                        this.updatePreview();
+                        this.generateConfig();
+                    });
+                    
+                    hexInput?.addEventListener('input', (e) => {
+                        if (this.isValidHex(e.target.value)) {
+                            this.currentTheme[color] = e.target.value;
+                            colorInput.value = e.target.value;
+                            this.updatePreview();
+                            this.generateConfig();
+                        }
+                    });
+                });
+                
+                // Typography controls
+                const fontFamilySelect = document.getElementById('font-family');
+                const baseSizeSlider = document.getElementById('base-size');
+                const lineHeightSlider = document.getElementById('line-height');
+                
+                fontFamilySelect?.addEventListener('change', (e) => {
+                    this.currentTheme.fontFamily = e.target.value;
+                    this.updatePreview();
+                    this.generateConfig();
+                });
+                
+                baseSizeSlider?.addEventListener('input', (e) => {
+                    this.currentTheme.fontSize = parseInt(e.target.value);
+                    document.getElementById('base-size-value').textContent = `${e.target.value}px`;
+                    this.updatePreview();
+                    this.generateConfig();
+                });
+                
+                lineHeightSlider?.addEventListener('input', (e) => {
+                    this.currentTheme.lineHeight = parseFloat(e.target.value);
+                    document.getElementById('line-height-value').textContent = e.target.value;
+                    this.updatePreview();
+                    this.generateConfig();
+                });
+                
+                // Generate random palette
+                document.getElementById('generate-palette')?.addEventListener('click', () => {
+                    this.generateRandomPalette();
+                });
+                
+                // Reset palette
+                document.getElementById('reset-palette')?.addEventListener('click', () => {
+                    this.resetPalette();
+                });
+                
+                // Device preview toggle
+                document.querySelectorAll('.device-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.device-btn').forEach(b => {
+                            b.classList.remove('bg-white', 'shadow-sm');
+                            b.classList.add('text-gray-600');
+                        });
+                        
+                        e.target.classList.add('bg-white', 'shadow-sm');
+                        e.target.classList.remove('text-gray-600');
+                        
+                        this.setPreviewDevice(e.target.dataset.device);
+                    });
+                });
+                
+                // Export functionality
+                document.getElementById('copy-config')?.addEventListener('click', () => {
+                    this.copyConfig();
+                });
+                
+                document.getElementById('download-config')?.addEventListener('click', () => {
+                    this.downloadConfig();
+                });
+                
+                // Update config when export options change
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        this.generateConfig();
+                    });
+                });
+            }
+            
+            isValidHex(hex) {
+                return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex);
+            }
+            
+            generateRandomPalette() {
+                const colors = ['primary', 'secondary', 'accent', 'neutral'];
+                colors.forEach(color => {
+                    const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+                    this.currentTheme[color] = randomColor;
+                    
+                    document.getElementById(`${color}-color`).value = randomColor;
+                    document.getElementById(`${color}-hex`).value = randomColor;
+                });
+                
+                this.updatePreview();
+                this.generateConfig();
+            }
+            
+            resetPalette() {
+                const defaultColors = {
+                    primary: '#8b5cf6',
+                    secondary: '#ec4899',
+                    accent: '#06b6d4',
+                    neutral: '#64748b'
+                };
+                
+                Object.entries(defaultColors).forEach(([color, value]) => {
+                    this.currentTheme[color] = value;
+                    
+                    document.getElementById(`${color}-color`).value = value;
+                    document.getElementById(`${color}-hex`).value = value;
+                });
+                
+                this.updatePreview();
+                this.generateConfig();
+            }
+            
+            updatePreview() {
+                const root = document.documentElement;
+                root.style.setProperty('--primary-color', this.currentTheme.primary);
+                root.style.setProperty('--secondary-color', this.currentTheme.secondary);
+                root.style.setProperty('--accent-color', this.currentTheme.accent);
+                root.style.setProperty('--neutral-color', this.currentTheme.neutral);
+                
+                // Update preview content font
+                const previewContent = document.getElementById('preview-content');
+                if (previewContent) {
+                    previewContent.style.fontFamily = this.currentTheme.fontFamily;
+                    previewContent.style.fontSize = `${this.currentTheme.fontSize}px`;
+                    previewContent.style.lineHeight = this.currentTheme.lineHeight;
+                }
+            }
+            
+            setPreviewDevice(device) {
+                const previewContent = document.getElementById('preview-content');
+                
+                // Remove existing device classes
+                previewContent.classList.remove('preview-mobile', 'preview-tablet', 'preview-desktop');
+                
+                // Add new device class and update dimensions
+                switch(device) {
+                    case 'mobile':
+                        previewContent.classList.add('preview-mobile');
+                        previewContent.style.maxWidth = '375px';
+                        previewContent.style.margin = '0 auto';
+                        break;
+                    case 'tablet':
+                        previewContent.classList.add('preview-tablet');
+                        previewContent.style.maxWidth = '768px';
+                        previewContent.style.margin = '0 auto';
+                        break;
+                    case 'desktop':
+                        previewContent.classList.add('preview-desktop');
+                        previewContent.style.maxWidth = '100%';
+                        previewContent.style.margin = '0';
+                        break;
+                }
+            }
+            
+            generateConfig() {
+                const includeResponsive = document.getElementById('include-responsive')?.checked;
+                const includeTypography = document.getElementById('include-typography')?.checked;
+                const includeComponents = document.getElementById('include-components')?.checked;
+                
+                let config = {
+                    theme: {
+                        extend: {
+                            colors: {
+                                primary: this.currentTheme.primary,
+                                secondary: this.currentTheme.secondary,
+                                accent: this.currentTheme.accent,
+                                neutral: this.currentTheme.neutral
+                            }
+                        }
+                    }
+                };
+                
+                if (includeResponsive) {
+                    config.theme.extend.screens = {
+                        'xs': '475px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                        '2xl': '1536px'
+                    };
+                }
+                
+                if (includeTypography) {
+                    config.theme.extend.fontFamily = {
+                        'custom': [this.currentTheme.fontFamily, 'sans-serif']
+                    };
+                    config.theme.extend.fontSize = {
+                        'base-custom': [`${this.currentTheme.fontSize}px`, `${this.currentTheme.lineHeight}`]
+                    };
+                }
+                
+                if (includeComponents) {
+                    config.plugins = ['@tailwindcss/forms', '@tailwindcss/typography'];
+                }
+                
+                const configText = JSON.stringify(config, null, 2);
+                document.getElementById('config-output').value = configText;
+            }
+            
+            async copyConfig() {
+                const configText = document.getElementById('config-output').value;
+                
+                try {
+                    await navigator.clipboard.writeText(configText);
+                    
+                    // Visual feedback
+                    const btn = document.getElementById('copy-config');
+                    const originalText = btn.textContent;
+                    btn.textContent = '✅ Copied!';
+                    btn.classList.add('bg-green-600');
+                    btn.classList.remove('bg-purple-600');
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.classList.remove('bg-green-600');
+                        btn.classList.add('bg-purple-600');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy config:', err);
+                }
+            }
+            
+            downloadConfig() {
+                const configText = document.getElementById('config-output').value;
+                const blob = new Blob([configText], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'tailwind.config.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+        
+        // Initialize the theme generator when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ThemeGenerator();
+        });
+        
+        // Handle responsive navigation
+        document.addEventListener('click', (e) => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            
+            if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
