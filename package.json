@@ -1,0 +1,20 @@
+{
+  "name": "daisydo",
+  "version": "1.0.0",
+  "description": "Tailwind Theme Generator a.k.a Daisy Daisy Give Me Your Answer Do",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tailwind:build": "tailwindcss -i ./src/input.css -o ./src/output.css --watch"
+  },
+  "keywords": ["tailwind", "theme", "generator", "responsive", "css"],
+  "author": "saffy",
+  "license": "MIT",
+  "devDependencies": {
+    "tailwindcss": "^3.3.0",
+    "vite": "^4.4.0",
+    "@tailwindcss/forms": "^0.5.6"
+  }
+}
