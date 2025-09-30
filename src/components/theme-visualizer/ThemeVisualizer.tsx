@@ -1,5 +1,5 @@
 import { useColorPalette } from '../../hooks/useColorPalette';
-import { generateDaisyUITheme, copyToClipboard } from '../../utils/color';
+import { generateDaisyUITheme, copyToClipboard } from '../../utils/colorUtils';
 import { Button } from '../ui/Button';
 import { useState } from 'react';
 

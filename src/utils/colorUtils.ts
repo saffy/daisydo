@@ -1,6 +1,9 @@
 /**
- * Utility functions for color manipulation in theme generation
+ * Comprehensive color utility functions for theme generation
+ * Combines accurate OKLCH conversion with palette generation
  */
+
+import type { ColorInfo } from '../types';
 
 export interface RgbColor {
   r: number;
@@ -33,7 +36,7 @@ export function rgbToHex(r: number, g: number, b: number): string {
   }).join("").toLowerCase();
 }
 
-// Advanced OKLCH color space functions
+// Advanced OKLCH color space functions with accurate conversion
 export function oklchToRgb(l: number, c: number, h: number): RgbColor {
   // Convert OKLCH to OKLab
   const hRad = (h * Math.PI) / 180;
@@ -65,17 +68,52 @@ export function oklchToRgb(l: number, c: number, h: number): RgbColor {
   return { r, g, b: bVal };
 }
 
-export function oklchToHex(l: number, c: number, h: number): string {
-  const rgb = oklchToRgb(l, c, h);
-  return rgbToHex(rgb.r, rgb.g, rgb.b);
+export function oklchToHex(l: number, c: number, h: number): string;
+export function oklchToHex(oklch: string): string;
+export function oklchToHex(lOrOklch: number | string, c?: number, h?: number): string {
+  if (typeof lOrOklch === 'string') {
+    // Parse OKLCH string format: oklch(50% 0.15 180)
+    const match = lOrOklch.match(/oklch\(([\d.]+)%\s+([\d.]+)\s+([\d.]+)\)/);
+    if (!match) return '#000000';
+    const [, l, cVal, hVal] = match.map(Number);
+    const rgb = oklchToRgb(l / 100, cVal, hVal);
+    return rgbToHex(rgb.r, rgb.g, rgb.b);
+  } else {
+    // Direct parameters
+    const rgb = oklchToRgb(lOrOklch, c!, h!);
+    return rgbToHex(rgb.r, rgb.g, rgb.b);
+  }
 }
 
+// Generate random OKLCH color (object format)
 export function generateRandomOklch(): OklchColor {
   return {
     l: 0.3 + Math.random() * 0.6,  // Lightness 30-90%
     c: 0.05 + Math.random() * 0.15, // Chroma 5-20%
     h: Math.random() * 360          // Hue 0-360°
   };
+}
+
+// Generate random OKLCH color string for CSS
+export function generateRandomOklchString(): string {
+  const lightness = Math.random() * 0.6 + 0.2; // 20% - 80%
+  const chroma = Math.random() * 0.3 + 0.05; // 5% - 35%
+  const hue = Math.random() * 360;
+  
+  return `oklch(${(lightness * 100).toFixed(2)}% ${chroma.toFixed(3)} ${hue.toFixed(2)})`;
+}
+
+// Generate a palette of colors
+export function generateColorPalette(): ColorInfo[] {
+  return Array.from({ length: 5 }, (_, index) => ({
+    id: `color-${index}`,
+    oklch: generateRandomOklchString(),
+    hex: '',
+    isLocked: false,
+  })).map(color => ({
+    ...color,
+    hex: oklchToHex(color.oklch),
+  }));
 }
 
 // Color manipulation functions
@@ -120,4 +158,41 @@ export function getContrastColor(hex: string): string {
   const luminance = getRelativeLuminance(r, g, b);
   
   return luminance > 0.5 ? '#000000' : '#ffffff';
+}
+
+// Copy text to clipboard
+export async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (err) {
+    console.error('Failed to copy text: ', err);
+    return false;
+  }
+}
+
+// Generate DaisyUI theme from color palette
+export function generateDaisyUITheme(colors: ColorInfo[]) {
+  const [primary, secondary, accent, neutral, base] = colors;
+  
+  return {
+    primary: primary.oklch,
+    secondary: secondary.oklch,
+    accent: accent.oklch,
+    neutral: neutral.oklch,
+    'base-100': base.oklch,
+    'base-200': adjustLightness(base.oklch, -0.05),
+    'base-300': adjustLightness(base.oklch, -0.1),
+  };
+}
+
+// Adjust lightness of OKLCH color string
+function adjustLightness(oklch: string, adjustment: number): string {
+  const match = oklch.match(/oklch\(([\d.]+)%\s+([\d.]+)\s+([\d.]+)\)/);
+  if (!match) return oklch;
+  
+  const [, l, c, h] = match;
+  const newLightness = Math.max(0, Math.min(100, parseFloat(l) + adjustment * 100));
+  
+  return `oklch(${newLightness.toFixed(2)}% ${c} ${h})`;
 }

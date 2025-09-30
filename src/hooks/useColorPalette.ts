@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { ColorInfo } from '../types';
-import { generateColorPalette, generateRandomOklch, oklchToHex } from '../utils/color';
+import { generateColorPalette, generateRandomOklchString, oklchToHex } from '../utils/colorUtils';
 
 export function useColorPalette() {
   const [colors, setColors] = useState<ColorInfo[]>(() => generateColorPalette());
@@ -11,7 +11,7 @@ export function useColorPalette() {
       prevColors.map(color => {
         if (color.isLocked) return color;
         
-        const newOklch = generateRandomOklch();
+        const newOklch = generateRandomOklchString();
         return {
           ...color,
           oklch: newOklch,

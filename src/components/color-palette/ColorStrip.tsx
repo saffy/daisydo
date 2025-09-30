@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ColorInfo } from '../../types';
-import { copyToClipboard } from '../../utils/color';
+import { copyToClipboard } from '../../utils/colorUtils';
 
 interface ColorStripProps {
   color: ColorInfo;
