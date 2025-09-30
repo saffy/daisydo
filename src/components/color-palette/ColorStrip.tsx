@@ -20,7 +20,7 @@ export function ColorStrip({ color, onToggleLock }: ColorStripProps) {
 
   return (
     <div 
-      className="relative flex-1 h-1/2 cursor-pointer group transition-all duration-200 hover:scale-105"
+      className="relative flex-1 h-full cursor-pointer group transition-all duration-200 hover:scale-105"
       style={{ backgroundColor: color.hex }}
       onClick={() => onToggleLock(color.id)}
     >
