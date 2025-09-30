@@ -1,104 +1,206 @@
-# DaisyDo - Tailwind Theme Generator 🌼
+# React + TypeScript + Vite
 
-**Tailwind Theme Generator a.k.a Daisy Daisy Give Me Your Answer Do**
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-A responsive, mobile-first Tailwind CSS theme generator that helps you create beautiful color palettes and export them as Tailwind config files.
+Currently, two official plugins are available:
 
-## 🚀 Features
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-### 📱 Fully Responsive Design
-- **Mobile-first approach** with 6 responsive breakpoints (xs, sm, md, lg, xl, 2xl)
-- **Touch-friendly interface** with 44px minimum touch targets for mobile devices
-- **Adaptive layouts** that work seamlessly across all device sizes
-- **Mobile navigation** with collapsible hamburger menu
-- **Safe area support** for notched devices (iPhone X+)
+## React Compiler
 
-### 🎨 Theme Generation
-- **Interactive color picker** with live preview
-- **Random palette generation** for inspiration
-- **Typography controls** with real-time font and sizing adjustments
-- **Live preview** showing how your theme looks in real components
-- **Device simulation** (Mobile/Tablet/Desktop views)
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-### 💾 Export Options
-- **Copy to clipboard** functionality
-- **Download as JSON** file
-- **Responsive breakpoints** included in export
-- **Typography settings** export
-- **Component examples** (optional)
+## Expanding the ESLint configuration
 
-## 🛠️ Tech Stack
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-- **HTML5** with semantic markup
-- **Tailwind CSS** via CDN for styling
-- **Vanilla JavaScript** for interactivity
-- **CSS Grid & Flexbox** for responsive layouts
-- **Modern CSS** features (clamp, env, custom properties)
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-## 🎯 Responsive Features
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-### Mobile (< 640px)
-- Single column layout
-- Collapsible navigation menu
-- Large touch targets (44px+)
-- Optimized spacing and typography
-
-### Tablet (640px - 1024px)
-- Two column layout for forms
-- Adaptive navigation
-- Improved component spacing
-
-### Desktop (> 1024px)
-- Full horizontal navigation
-- Multi-column layouts
-- Enhanced visual hierarchy
-
-## 🚀 Getting Started
-
-### Option 1: Direct Usage
-Simply open `index.html` in your browser - the app uses Tailwind CSS via CDN and requires no build step.
-
-### Option 2: Development Setup
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-## 📱 Browser Support
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-- **Modern browsers** with ES6+ support
-- **Mobile Safari** (iOS 12+)
-- **Chrome Mobile** (Android 7+)
-- **Desktop browsers** (Chrome, Firefox, Safari, Edge)
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## 🌟 Key Responsive Implementation Details
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-### Touch Optimization
-- Minimum 44px touch targets for all interactive elements
-- `touch-action: manipulation` for better touch response
-- Optimized form controls for mobile input
+A modern, visual theme generator for Tailwind CSS built with React and TypeScript.
 
-### Performance
-- Efficient CSS with mobile-first media queries
-- Smooth animations and transitions
-- Optimized image assets and icons
+## Features
 
-### Accessibility
-- Semantic HTML structure
-- Proper ARIA labels and roles
-- Keyboard navigation support
-- High contrast color options
+- 🎨 **Visual Theme Generation**: Interactive theme customization with real-time preview
+- 🌙 **Light/Dark Mode Toggle**: Switch between light and dark themes
+- 🎯 **Color Picker**: Choose custom primary colors for your theme
+- 📱 **Responsive Design**: Works beautifully on desktop and mobile devices
+- ⚡ **Fast Development**: Built with Vite for lightning-fast development experience
 
-## 📄 License
+## Getting Started
 
-MIT License - feel free to use in your projects!
+### Prerequisites
 
----
+- Node.js (version 16 or higher)
+- npm or yarn
 
-Made with ❤️ for the Tailwind community
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/saffy/daisydo.git
+cd daisydo
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+## Development Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+## Testing
+
+This project includes comprehensive testing setup with both unit tests and end-to-end tests.
+
+### Unit Tests
+
+Unit tests are powered by **Vitest** and **React Testing Library**:
+
+```bash
+# Run unit tests
+npm run test
+
+# Run tests in watch mode
+npm test
+
+# Run tests with UI
+npm run test:ui
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+Unit tests cover:
+- Component rendering and behavior
+- Theme switching functionality  
+- Color picker interactions
+- Utility functions for color manipulation
+
+### End-to-End Tests
+
+E2E tests are powered by **Playwright** for comprehensive visual and functional testing:
+
+```bash
+# Install Playwright browsers (first time only)
+npm run test:install
+
+# Run e2e tests
+npm run test:e2e
+
+# Run e2e tests with UI
+npm run test:e2e:ui
+
+# Run e2e tests in headed mode (visible browser)
+npm run test:e2e:headed
+```
+
+E2E tests include:
+- **Visual regression testing** with screenshot comparisons
+- **Theme switching** verification across different browsers
+- **Color picker functionality** testing
+- **Responsive layout** testing on mobile viewports
+- **Accessibility testing** with keyboard navigation
+
+### Test Structure
+
+```
+tests/
+├── unit/                 # Unit tests with Vitest
+│   ├── App.test.tsx     # Main app component tests
+│   └── colorUtils.test.ts # Color utility function tests
+├── e2e/                 # End-to-end tests with Playwright
+│   └── app.spec.ts      # E2E test scenarios
+└── setup.ts             # Test setup configuration
+```
+
+## Technology Stack
+
+- **React 18** - UI framework
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **Vitest** - Unit testing framework
+- **React Testing Library** - Component testing utilities
+- **Playwright** - End-to-end testing framework
+- **ESLint** - Code linting
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests to ensure everything works (`npm test && npm run test:e2e`)
+5. Commit your changes (`git commit -m 'Add some amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+## License
+
+This project is licensed under the ISC License.
