@@ -1,0 +1,19 @@
+{
+  "name": "daisydo",
+  "version": "1.0.0",
+  "description": "Tailwind Theme Generator a.k.a Daisy Daisy Give Me Your Answer Do",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "build": "node build.js",
+    "dev": "node dev.js"
+  },
+  "keywords": ["tailwind", "daisyui", "theme", "color", "oklch"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "culori": "^4.0.1"
+  },
+  "devDependencies": {}
+}
