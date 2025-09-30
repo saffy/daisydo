@@ -1,0 +1,56 @@
+/* Color Palette Styles - Using Tailwind Components */
+@layer components {
+  .color-palette-container {
+    @apply mb-8;
+  }
+
+  .color-palette {
+    @apply flex min-h-96 max-w-6xl mx-auto shadow-2xl rounded-xl overflow-hidden;
+  }
+
+  .color-block {
+    @apply flex-1 flex flex-col justify-end relative min-h-96 transition-transform duration-200 cursor-pointer hover:scale-105 hover:z-10;
+  }
+
+  .color-info {
+    @apply absolute bottom-0 left-0 right-0 p-6 text-center;
+  }
+
+  .hex-code {
+    @apply text-4xl font-semibold font-mono mb-2 drop-shadow-lg;
+    width: 60%;
+    margin: 0 auto 0.5rem auto;
+    line-height: 1.2;
+  }
+
+  .color-name {
+    @apply text-sm font-medium opacity-80 uppercase tracking-wider mt-1;
+  }
+
+  .palette-controls {
+    @apply text-center mt-8;
+  }
+
+  .generate-button {
+    @apply bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200;
+  }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .color-palette {
+    @apply flex-col min-h-auto;
+  }
+  
+  .color-block {
+    @apply min-h-32;
+  }
+  
+  .hex-code {
+    @apply text-2xl;
+  }
+  
+  .color-info {
+    @apply p-4;
+  }
+}

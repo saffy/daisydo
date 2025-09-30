@@ -1,30 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DaisyDo - Tailwind Theme Generator</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>DaisyDo</h1>
-        <p>Tailwind Theme Generator</p>
-    </header>
-    
-    <main>
-        <div id="color-palette" class="color-palette">
-            <!-- Color blocks will be dynamically generated here -->
-        </div>
-        
-        <div class="controls">
-            <button id="generate-palette">Generate New Palette</button>
-        </div>
-    </main>
-    
-    <script src="script.js"></script>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

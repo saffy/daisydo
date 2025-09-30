@@ -12,7 +12,7 @@ describe('App', () => {
   it('has light theme by default', () => {
     render(<App />)
     const app = screen.getByTestId('app')
-    expect(app).toHaveClass('light')
+    expect(app).toHaveClass('bg-gray-50', 'text-gray-900')
   })
 
   it('toggles theme when button is clicked', () => {
@@ -20,12 +20,12 @@ describe('App', () => {
     const themeToggle = screen.getByTestId('theme-toggle')
     const app = screen.getByTestId('app')
 
-    expect(app).toHaveClass('light')
+    expect(app).toHaveClass('bg-gray-50', 'text-gray-900')
     expect(themeToggle).toHaveTextContent('light')
 
     fireEvent.click(themeToggle)
 
-    expect(app).toHaveClass('dark')
+    expect(app).toHaveClass('bg-gray-900', 'text-white')
     expect(themeToggle).toHaveTextContent('dark')
   })
 
