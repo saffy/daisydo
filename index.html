@@ -85,6 +85,136 @@
             outline: 2px solid #3b82f6;
             outline-offset: 2px;
         }
+        
+        /* Color picker enhancements */
+        .color-picker-container {
+            position: relative;
+        }
+        
+        .color-name {
+            font-size: 0.75rem;
+            color: #6b7280;
+            transition: color 0.2s ease;
+        }
+        
+        .color-name:hover {
+            color: #8b5cf6;
+        }
+        
+        .color-locked .lock-icon {
+            filter: hue-rotate(20deg);
+        }
+        
+        .color-locked {
+            border-color: #f59e0b;
+            background-color: #fef3c7;
+        }
+        
+        /* Custom Color Picker Modal */
+        .color-picker-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+        
+        .color-picker-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .color-picker-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 400px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .color-canvas-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin: 16px auto;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+        
+        .color-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hue-slider-container {
+            width: 300px;
+            height: 20px;
+            margin: 16px auto;
+            border-radius: 10px;
+            background: linear-gradient(to right, 
+                #ff0000 0%, #ffff00 17%, #00ff00 33%, 
+                #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .slider-thumb {
+            position: absolute;
+            top: -2px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            transform: translateX(-50%);
+        }
+        
+        .color-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            margin: 16px auto;
+        }
+        
+        .color-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .color-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .color-input-group label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+        }
+        
+        .color-input-group input {
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -155,48 +285,104 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
                             <div class="flex items-center space-x-3">
-                                <input type="color" id="primary-color" 
-                                       class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer" 
-                                       value="#8b5cf6">
-                                <input type="text" id="primary-hex" 
-                                       class="input-responsive flex-1 border-gray-300 rounded-lg text-sm" 
-                                       value="#8b5cf6" placeholder="#8b5cf6">
+                                <div id="primary-color-picker" 
+                                     class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer"
+                                     style="background-color: #8b5cf6;">
+                                </div>
+                                <div class="flex-1 space-y-1">
+                                    <input type="text" id="primary-hex" 
+                                           class="input-responsive w-full border-gray-300 rounded-lg text-sm cursor-pointer hover:bg-gray-50" 
+                                           value="#8b5cf6" placeholder="#8b5cf6" readonly
+                                           title="Click to open color picker">
+                                    <div id="primary-color-name" 
+                                         class="text-xs text-gray-500 cursor-pointer hover:text-purple-600 transition-colors"
+                                         title="Click to open color picker">
+                                        Medium Slate Blue
+                                    </div>
+                                </div>
+                                <button type="button" id="primary-lock" 
+                                        class="input-responsive w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-purple-500 transition-colors flex items-center justify-center"
+                                        title="Lock/Unlock color">
+                                    <span class="lock-icon">🔓</span>
+                                </button>
                             </div>
                         </div>
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
                             <div class="flex items-center space-x-3">
-                                <input type="color" id="secondary-color" 
-                                       class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer" 
-                                       value="#ec4899">
-                                <input type="text" id="secondary-hex" 
-                                       class="input-responsive flex-1 border-gray-300 rounded-lg text-sm" 
-                                       value="#ec4899" placeholder="#ec4899">
+                                <div id="secondary-color-picker" 
+                                     class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer"
+                                     style="background-color: #ec4899;">
+                                </div>
+                                <div class="flex-1 space-y-1">
+                                    <input type="text" id="secondary-hex" 
+                                           class="input-responsive w-full border-gray-300 rounded-lg text-sm cursor-pointer hover:bg-gray-50" 
+                                           value="#ec4899" placeholder="#ec4899" readonly
+                                           title="Click to open color picker">
+                                    <div id="secondary-color-name" 
+                                         class="text-xs text-gray-500 cursor-pointer hover:text-purple-600 transition-colors"
+                                         title="Click to open color picker">
+                                        Deep Pink
+                                    </div>
+                                </div>
+                                <button type="button" id="secondary-lock" 
+                                        class="input-responsive w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-purple-500 transition-colors flex items-center justify-center"
+                                        title="Lock/Unlock color">
+                                    <span class="lock-icon">🔓</span>
+                                </button>
                             </div>
                         </div>
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Accent Color</label>
                             <div class="flex items-center space-x-3">
-                                <input type="color" id="accent-color" 
-                                       class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer" 
-                                       value="#06b6d4">
-                                <input type="text" id="accent-hex" 
-                                       class="input-responsive flex-1 border-gray-300 rounded-lg text-sm" 
-                                       value="#06b6d4" placeholder="#06b6d4">
+                                <div id="accent-color-picker" 
+                                     class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer"
+                                     style="background-color: #06b6d4;">
+                                </div>
+                                <div class="flex-1 space-y-1">
+                                    <input type="text" id="accent-hex" 
+                                           class="input-responsive w-full border-gray-300 rounded-lg text-sm cursor-pointer hover:bg-gray-50" 
+                                           value="#06b6d4" placeholder="#06b6d4" readonly
+                                           title="Click to open color picker">
+                                    <div id="accent-color-name" 
+                                         class="text-xs text-gray-500 cursor-pointer hover:text-purple-600 transition-colors"
+                                         title="Click to open color picker">
+                                        Dark Turquoise
+                                    </div>
+                                </div>
+                                <button type="button" id="accent-lock" 
+                                        class="input-responsive w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-purple-500 transition-colors flex items-center justify-center"
+                                        title="Lock/Unlock color">
+                                    <span class="lock-icon">🔓</span>
+                                </button>
                             </div>
                         </div>
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Neutral Color</label>
                             <div class="flex items-center space-x-3">
-                                <input type="color" id="neutral-color" 
-                                       class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer" 
-                                       value="#64748b">
-                                <input type="text" id="neutral-hex" 
-                                       class="input-responsive flex-1 border-gray-300 rounded-lg text-sm" 
-                                       value="#64748b" placeholder="#64748b">
+                                <div id="neutral-color-picker" 
+                                     class="input-responsive w-12 h-12 rounded-lg border-2 border-gray-300 cursor-pointer"
+                                     style="background-color: #64748b;">
+                                </div>
+                                <div class="flex-1 space-y-1">
+                                    <input type="text" id="neutral-hex" 
+                                           class="input-responsive w-full border-gray-300 rounded-lg text-sm cursor-pointer hover:bg-gray-50" 
+                                           value="#64748b" placeholder="#64748b" readonly
+                                           title="Click to open color picker">
+                                    <div id="neutral-color-name" 
+                                         class="text-xs text-gray-500 cursor-pointer hover:text-purple-600 transition-colors"
+                                         title="Click to open color picker">
+                                        Slate Gray
+                                    </div>
+                                </div>
+                                <button type="button" id="neutral-lock" 
+                                        class="input-responsive w-10 h-10 rounded-lg border-2 border-gray-300 hover:border-purple-500 transition-colors flex items-center justify-center"
+                                        title="Lock/Unlock color">
+                                    <span class="lock-icon">🔓</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -389,6 +575,59 @@
         </section>
     </main>
 
+    <!-- Custom Color Picker Modal -->
+    <div id="color-picker-modal" class="color-picker-modal">
+        <div class="color-picker-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Choose Color</h3>
+                <button id="close-color-picker" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="color-canvas-container">
+                <canvas id="color-canvas" class="color-canvas" width="300" height="200"></canvas>
+                <div id="canvas-crosshair" class="absolute w-3 h-3 border-2 border-white rounded-full shadow-sm pointer-events-none transform -translate-x-1/2 -translate-y-1/2" style="left: 50%; top: 50%;"></div>
+            </div>
+            
+            <div class="hue-slider-container">
+                <div id="hue-slider-thumb" class="slider-thumb" style="left: 0%;"></div>
+            </div>
+            
+            <div class="color-preview" id="color-preview"></div>
+            
+            <div class="color-inputs">
+                <div class="color-input-group">
+                    <label for="color-hex-input">Hex</label>
+                    <input type="text" id="color-hex-input" placeholder="#FF0000">
+                </div>
+                <div class="color-input-group">
+                    <label for="color-name-input">Name</label>
+                    <input type="text" id="color-name-input" readonly placeholder="Red">
+                </div>
+                <div class="color-input-group">
+                    <label for="color-rgb-input">RGB</label>
+                    <input type="text" id="color-rgb-input" placeholder="255, 0, 0">
+                </div>
+                <div class="color-input-group">
+                    <label for="color-hsl-input">HSL</label>
+                    <input type="text" id="color-hsl-input" placeholder="0, 100%, 50%">
+                </div>
+            </div>
+            
+            <div class="flex gap-3 mt-6">
+                <button id="apply-color" class="flex-1 bg-purple-600 text-white rounded-lg py-2 px-4 font-medium hover:bg-purple-700 transition-colors">
+                    Apply Color
+                </button>
+                <button id="cancel-color" class="flex-1 bg-gray-100 text-gray-700 rounded-lg py-2 px-4 font-medium hover:bg-gray-200 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Responsive footer -->
     <footer class="bg-white border-t border-gray-200 mt-12 sm:mt-16 lg:mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -409,6 +648,276 @@
 
     <!-- JavaScript for interactivity -->
     <script>
+        // Color name database for human-readable color names
+        const colorNames = {
+            '#FF0000': 'Red', '#008000': 'Green', '#0000FF': 'Blue', '#FFFF00': 'Yellow',
+            '#FF00FF': 'Magenta', '#00FFFF': 'Cyan', '#800000': 'Maroon', '#808000': 'Olive',
+            '#008080': 'Teal', '#800080': 'Purple', '#000080': 'Navy', '#C0C0C0': 'Silver',
+            '#808080': 'Gray', '#000000': 'Black', '#FFFFFF': 'White', '#FFA500': 'Orange',
+            '#FFC0CB': 'Pink', '#8B4513': 'Saddle Brown', '#DDA0DD': 'Plum', '#98FB98': 'Pale Green',
+            '#F0E68C': 'Khaki', '#E6E6FA': 'Lavender', '#FFB6C1': 'Light Pink', '#20B2AA': 'Light Sea Green',
+            '#87CEEB': 'Sky Blue', '#778899': 'Light Slate Gray', '#B0C4DE': 'Light Steel Blue',
+            '#FFFFE0': 'Light Yellow', '#00FF00': 'Lime', '#32CD32': 'Lime Green', '#FAF0E6': 'Linen',
+            '#FF00FF': 'Magenta', '#800000': 'Maroon', '#66CDAA': 'Medium Aquamarine', '#0000CD': 'Medium Blue',
+            '#BA55D3': 'Medium Orchid', '#9370DB': 'Medium Purple', '#3CB371': 'Medium Sea Green',
+            '#7B68EE': 'Medium Slate Blue', '#00FA9A': 'Medium Spring Green', '#48D1CC': 'Medium Turquoise',
+            '#C71585': 'Medium Violet Red', '#191970': 'Midnight Blue', '#F5FFFA': 'Mint Cream',
+            '#FFE4E1': 'Misty Rose', '#FFE4B5': 'Moccasin', '#8b5cf6': 'Medium Slate Blue',
+            '#ec4899': 'Deep Pink', '#06b6d4': 'Dark Turquoise', '#64748b': 'Slate Gray',
+            '#ef4444': 'Red', '#f97316': 'Orange', '#eab308': 'Yellow', '#22c55e': 'Green',
+            '#3b82f6': 'Blue', '#6366f1': 'Indigo', '#8b5cf6': 'Violet', '#d946ef': 'Fuchsia',
+            '#ec4899': 'Pink', '#f43f5e': 'Rose'
+        };
+
+        // Helper functions for color conversion
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+        }
+
+        function hslToRgb(h, s, l) {
+            h /= 360;
+            s /= 100;
+            l /= 100;
+            
+            const a = s * Math.min(l, 1 - l);
+            const f = n => {
+                const k = (n + h / (1/12)) % 12;
+                return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+            };
+            
+            return {
+                r: Math.round(f(0) * 255),
+                g: Math.round(f(8) * 255),
+                b: Math.round(f(4) * 255)
+            };
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            
+            return {
+                h: Math.round(h * 360),
+                s: Math.round(s * 100),
+                l: Math.round(l * 100)
+            };
+        }
+
+        function getColorName(hex) {
+            const targetHex = hex.toUpperCase();
+            
+            if (colorNames[targetHex]) {
+                return colorNames[targetHex];
+            }
+            
+            let closestColor = 'Custom Color';
+            let minDistance = Infinity;
+            
+            const target = hexToRgb(targetHex);
+            if (!target) return 'Custom Color';
+            
+            for (const [colorHex, name] of Object.entries(colorNames)) {
+                const color = hexToRgb(colorHex);
+                if (color) {
+                    const distance = Math.sqrt(
+                        Math.pow(target.r - color.r, 2) +
+                        Math.pow(target.g - color.g, 2) +
+                        Math.pow(target.b - color.b, 2)
+                    );
+                    
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestColor = name;
+                    }
+                }
+            }
+            
+            return closestColor;
+        }
+
+        // Custom Color Picker Class
+        class CustomColorPicker {
+            constructor() {
+                this.modal = document.getElementById('color-picker-modal');
+                this.canvas = document.getElementById('color-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.crosshair = document.getElementById('canvas-crosshair');
+                this.hueSlider = document.querySelector('.hue-slider-container');
+                this.hueThumb = document.getElementById('hue-slider-thumb');
+                this.preview = document.getElementById('color-preview');
+                
+                this.currentHue = 0;
+                this.currentSaturation = 100;
+                this.currentLightness = 50;
+                this.currentColor = '#FF0000';
+                this.onColorChange = null;
+                this.targetColorType = null;
+                
+                this.initializeEventListeners();
+                this.drawColorCanvas();
+            }
+            
+            initializeEventListeners() {
+                // Canvas interaction
+                this.canvas.addEventListener('mousedown', (e) => this.handleCanvasInteraction(e));
+                this.canvas.addEventListener('mousemove', (e) => {
+                    if (e.buttons === 1) this.handleCanvasInteraction(e);
+                });
+                
+                // Hue slider interaction
+                this.hueSlider.addEventListener('mousedown', (e) => this.handleHueSliderInteraction(e));
+                this.hueSlider.addEventListener('mousemove', (e) => {
+                    if (e.buttons === 1) this.handleHueSliderInteraction(e);
+                });
+                
+                // Input fields
+                document.getElementById('color-hex-input').addEventListener('input', (e) => {
+                    this.setColorFromHex(e.target.value);
+                });
+                
+                // Modal controls
+                document.getElementById('close-color-picker').addEventListener('click', () => this.hide());
+                document.getElementById('cancel-color').addEventListener('click', () => this.hide());
+                document.getElementById('apply-color').addEventListener('click', () => this.applyColor());
+                
+                // Close on outside click
+                this.modal.addEventListener('click', (e) => {
+                    if (e.target === this.modal) this.hide();
+                });
+            }
+            
+            show(colorType, currentColor, onColorChange) {
+                this.targetColorType = colorType;
+                this.onColorChange = onColorChange;
+                this.setColorFromHex(currentColor);
+                this.modal.classList.add('active');
+            }
+            
+            hide() {
+                this.modal.classList.remove('active');
+            }
+            
+            applyColor() {
+                if (this.onColorChange) {
+                    this.onColorChange(this.currentColor);
+                }
+                this.hide();
+            }
+            
+            setColorFromHex(hex) {
+                if (!/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)) return;
+                
+                this.currentColor = hex;
+                const rgb = hexToRgb(hex);
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                
+                this.currentHue = hsl.h;
+                this.currentSaturation = hsl.s;
+                this.currentLightness = hsl.l;
+                
+                this.updateUI();
+            }
+            
+            handleCanvasInteraction(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const saturation = (x / this.canvas.width) * 100;
+                const lightness = 100 - (y / this.canvas.height) * 100;
+                
+                this.currentSaturation = Math.max(0, Math.min(100, saturation));
+                this.currentLightness = Math.max(0, Math.min(100, lightness));
+                
+                this.updateColorFromHSL();
+            }
+            
+            handleHueSliderInteraction(e) {
+                const rect = this.hueSlider.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const hue = (x / rect.width) * 360;
+                
+                this.currentHue = Math.max(0, Math.min(360, hue));
+                this.updateColorFromHSL();
+                this.drawColorCanvas();
+            }
+            
+            updateColorFromHSL() {
+                const rgb = hslToRgb(this.currentHue, this.currentSaturation, this.currentLightness);
+                this.currentColor = rgbToHex(rgb.r, rgb.g, rgb.b);
+                this.updateUI();
+            }
+            
+            updateUI() {
+                // Update preview
+                this.preview.style.backgroundColor = this.currentColor;
+                
+                // Update crosshair position
+                const x = (this.currentSaturation / 100) * this.canvas.width;
+                const y = (1 - this.currentLightness / 100) * this.canvas.height;
+                this.crosshair.style.left = `${x}px`;
+                this.crosshair.style.top = `${y}px`;
+                
+                // Update hue slider thumb
+                const huePosition = (this.currentHue / 360) * 100;
+                this.hueThumb.style.left = `${huePosition}%`;
+                
+                // Update input fields
+                document.getElementById('color-hex-input').value = this.currentColor;
+                document.getElementById('color-name-input').value = getColorName(this.currentColor);
+                
+                const rgb = hexToRgb(this.currentColor);
+                document.getElementById('color-rgb-input').value = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+                
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                document.getElementById('color-hsl-input').value = `${hsl.h}, ${hsl.s}%, ${hsl.l}%`;
+            }
+            
+            drawColorCanvas() {
+                // Create gradient from white to the current hue
+                for (let x = 0; x < this.canvas.width; x++) {
+                    for (let y = 0; y < this.canvas.height; y++) {
+                        const saturation = (x / this.canvas.width) * 100;
+                        const lightness = 100 - (y / this.canvas.height) * 100;
+                        
+                        const rgb = hslToRgb(this.currentHue, saturation, lightness);
+                        const color = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+                        
+                        this.ctx.fillStyle = color;
+                        this.ctx.fillRect(x, y, 1, 1);
+                    }
+                }
+            }
+        }
+
         // Theme generator functionality
         class ThemeGenerator {
             constructor() {
@@ -422,9 +931,59 @@
                     lineHeight: 1.6
                 };
                 
+                this.lockedColors = new Set();
+                this.colorPicker = new CustomColorPicker();
+                
                 this.initializeEventListeners();
+                this.updateAllColorDisplays();
                 this.updatePreview();
                 this.generateConfig();
+            }
+            
+            updateAllColorDisplays() {
+                ['primary', 'secondary', 'accent', 'neutral'].forEach(colorType => {
+                    this.updateColorDisplay(colorType, this.currentTheme[colorType]);
+                });
+            }
+            
+            updateColorDisplay(colorType, hexColor) {
+                const colorPicker = document.getElementById(`${colorType}-color-picker`);
+                const hexInput = document.getElementById(`${colorType}-hex`);
+                const colorNameElement = document.getElementById(`${colorType}-color-name`);
+                
+                colorPicker.style.backgroundColor = hexColor;
+                hexInput.value = hexColor;
+                colorNameElement.textContent = getColorName(hexColor);
+            }
+            
+            openColorPicker(colorType) {
+                this.colorPicker.show(colorType, this.currentTheme[colorType], (newColor) => {
+                    this.updateColor(colorType, newColor);
+                });
+            }
+            
+            updateColor(colorType, hexColor) {
+                this.currentTheme[colorType] = hexColor;
+                this.updateColorDisplay(colorType, hexColor);
+                this.updatePreview();
+                this.generateConfig();
+            }
+            
+            toggleColorLock(colorType) {
+                const lockButton = document.getElementById(`${colorType}-lock`);
+                const lockIcon = lockButton.querySelector('.lock-icon');
+                
+                if (this.lockedColors.has(colorType)) {
+                    this.lockedColors.delete(colorType);
+                    lockIcon.textContent = '🔓';
+                    lockButton.classList.remove('color-locked');
+                    lockButton.title = 'Lock color';
+                } else {
+                    this.lockedColors.add(colorType);
+                    lockIcon.textContent = '🔒';
+                    lockButton.classList.add('color-locked');
+                    lockButton.title = 'Unlock color';
+                }
             }
             
             initializeEventListeners() {
@@ -436,25 +995,23 @@
                     mobileMenu.classList.toggle('hidden');
                 });
                 
-                // Color inputs
-                ['primary', 'secondary', 'accent', 'neutral'].forEach(color => {
-                    const colorInput = document.getElementById(`${color}-color`);
-                    const hexInput = document.getElementById(`${color}-hex`);
+                // Color picker interactions
+                ['primary', 'secondary', 'accent', 'neutral'].forEach(colorType => {
+                    // Color picker click
+                    const colorPickerElement = document.getElementById(`${colorType}-color-picker`);
+                    const hexInput = document.getElementById(`${colorType}-hex`);
+                    const colorName = document.getElementById(`${colorType}-color-name`);
                     
-                    colorInput?.addEventListener('input', (e) => {
-                        this.currentTheme[color] = e.target.value;
-                        hexInput.value = e.target.value;
-                        this.updatePreview();
-                        this.generateConfig();
+                    [colorPickerElement, hexInput, colorName].forEach(element => {
+                        element.addEventListener('click', () => {
+                            this.openColorPicker(colorType);
+                        });
                     });
                     
-                    hexInput?.addEventListener('input', (e) => {
-                        if (this.isValidHex(e.target.value)) {
-                            this.currentTheme[color] = e.target.value;
-                            colorInput.value = e.target.value;
-                            this.updatePreview();
-                            this.generateConfig();
-                        }
+                    // Lock button
+                    const lockButton = document.getElementById(`${colorType}-lock`);
+                    lockButton.addEventListener('click', () => {
+                        this.toggleColorLock(colorType);
                     });
                 });
                 
@@ -525,22 +1082,14 @@
                 });
             }
             
-            isValidHex(hex) {
-                return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex);
-            }
-            
             generateRandomPalette() {
                 const colors = ['primary', 'secondary', 'accent', 'neutral'];
                 colors.forEach(color => {
-                    const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-                    this.currentTheme[color] = randomColor;
+                    if (this.lockedColors.has(color)) return;
                     
-                    document.getElementById(`${color}-color`).value = randomColor;
-                    document.getElementById(`${color}-hex`).value = randomColor;
+                    const randomColor = '#' + Math.floor(Math.random()*16677215).toString(16).padStart(6, '0');
+                    this.updateColor(color, randomColor);
                 });
-                
-                this.updatePreview();
-                this.generateConfig();
             }
             
             resetPalette() {
@@ -552,14 +1101,9 @@
                 };
                 
                 Object.entries(defaultColors).forEach(([color, value]) => {
-                    this.currentTheme[color] = value;
-                    
-                    document.getElementById(`${color}-color`).value = value;
-                    document.getElementById(`${color}-hex`).value = value;
+                    if (this.lockedColors.has(color)) return;
+                    this.updateColor(color, value);
                 });
-                
-                this.updatePreview();
-                this.generateConfig();
             }
             
             updatePreview() {
@@ -569,7 +1113,6 @@
                 root.style.setProperty('--accent-color', this.currentTheme.accent);
                 root.style.setProperty('--neutral-color', this.currentTheme.neutral);
                 
-                // Update preview content font
                 const previewContent = document.getElementById('preview-content');
                 if (previewContent) {
                     previewContent.style.fontFamily = this.currentTheme.fontFamily;
@@ -581,10 +1124,8 @@
             setPreviewDevice(device) {
                 const previewContent = document.getElementById('preview-content');
                 
-                // Remove existing device classes
                 previewContent.classList.remove('preview-mobile', 'preview-tablet', 'preview-desktop');
                 
-                // Add new device class and update dimensions
                 switch(device) {
                     case 'mobile':
                         previewContent.classList.add('preview-mobile');
@@ -656,7 +1197,6 @@
                 try {
                     await navigator.clipboard.writeText(configText);
                     
-                    // Visual feedback
                     const btn = document.getElementById('copy-config');
                     const originalText = btn.textContent;
                     btn.textContent = '✅ Copied!';
@@ -698,7 +1238,7 @@
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             
-            if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+            if (mobileMenuBtn && !mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
                 mobileMenu.classList.add('hidden');
             }
         });
@@ -715,7 +1255,6 @@
                         block: 'start'
                     });
                     
-                    // Close mobile menu if open
                     document.getElementById('mobile-menu').classList.add('hidden');
                 }
             });
