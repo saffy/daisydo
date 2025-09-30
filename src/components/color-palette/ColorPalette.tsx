@@ -5,7 +5,7 @@ export function ColorPalette() {
   const { colors, toggleColorLock } = useColorPalette();
 
   return (
-    <div className="flex h-1/2 w-full">
+    <div className="flex h-screen w-full">
       {colors.map((color) => (
         <ColorStrip
           key={color.id}
