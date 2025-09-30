@@ -6,9 +6,11 @@
 export * from './color-utils.js';
 export * from './theme-config.js';
 export * from './theme-generator.js';
+export * from './html-preview.js';
 
 import { createThemeConfig, validateThemeConfig } from './theme-config.js';
 import { generateCSSVariables, generateDaisyUITheme } from './theme-generator.js';
+import { generateHTMLPreview } from './html-preview.js';
 
 /**
  * Main theme generator class
@@ -54,9 +56,18 @@ export class DaisyDoThemeGenerator {
   }
   
   /**
+   * Generate HTML preview page
+   * @param {string} themeName - Name for the theme preview
+   * @returns {string} Complete HTML page
+   */
+  generatePreview(themeName = 'Custom Theme') {
+    return generateHTMLPreview(this.config, themeName);
+  }
+  
+  /**
    * Export theme to file
-   * @param {string} format - Export format ('css' or 'json')
-   * @param {string} themeName - Theme name (for JSON export)
+   * @param {string} format - Export format ('css', 'json', or 'html')
+   * @param {string} themeName - Theme name (for JSON/HTML export)
    * @returns {string} Formatted theme data
    */
   export(format = 'css', themeName = 'custom') {
@@ -65,6 +76,8 @@ export class DaisyDoThemeGenerator {
         return this.generateCSS();
       case 'json':
         return JSON.stringify(this.generateTheme(themeName), null, 2);
+      case 'html':
+        return this.generatePreview(themeName);
       default:
         throw new Error(`Unsupported export format: ${format}`);
     }

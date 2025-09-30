@@ -4,6 +4,9 @@
   "description": "Tailwind Theme Generator a.k.a Daisy Daisy Give Me Your Answer Do",
   "main": "index.js",
   "type": "module",
+  "bin": {
+    "daisydo": "./bin/daisydo.js"
+  },
   "scripts": {
     "test": "node --test",
     "build": "node build.js",
