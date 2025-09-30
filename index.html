@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DaisyDo - Tailwind Theme Generator</title>
+    <link rel="stylesheet" href="tailwind-fallback.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">DaisyDo</h1>
+            <p class="text-lg text-gray-600">Tailwind Theme Generator - Drag & Drop to Reorder Colors</p>
+        </header>
+
+        <main>
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Color Palette</h2>
+                <p class="text-gray-600 mb-4">Drag and drop colors to reorder them in your palette</p>
+                
+                <div id="colorPalette" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <!-- Color items will be dynamically generated -->
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-4">Generated Tailwind Config</h2>
+                <pre id="tailwindConfig" class="bg-gray-50 p-4 rounded-lg overflow-x-auto text-sm"><code>// Tailwind config will be generated here</code></pre>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
